@@ -29,7 +29,7 @@ public class CourseController {
 		
 		if(course.isPresent()) {
 			model.addAttribute("courses", course.get());
-			return "courses";
+			return "course-template";
 		}
 		
 		throw new CourseNotFoundException();
@@ -39,18 +39,18 @@ public class CourseController {
 	public String findAllCourses(Model model) {
 		
 		model.addAttribute("courses", courseRepo.findAll());
-		return "courses";
+		return "courses-template";
 	}
 
 	@RequestMapping("/topic")
-	public String findOneTopic(@RequestParam(value="Id") long Id, Model model) throws TopicNotFoundException {
+	public String findOneTopic(@RequestParam(value="id") long id, Model model) throws TopicNotFoundException {
 		
-		Optional<Topic> topic = topicRepo.findById(Id);
+		Optional<Topic> topic = topicRepo.findById(id);
 		
 		if(topic.isPresent()) {
 			model.addAttribute("topics", topic.get());
 			model.addAttribute("courses", courseRepo.findByTopicsContains(topic.get()));
-			return "topic";
+			return "topic-template";
 		}
 		
 		throw new TopicNotFoundException();
@@ -60,7 +60,7 @@ public class CourseController {
 	public String findAllTopics(Model model) {
 		
 		model.addAttribute("topics",topicRepo.findAll());
-		return "topics";
+		return "topics-template";
 		
 	}
 
@@ -72,7 +72,7 @@ public class CourseController {
 		if(textbook.isPresent()) {
 			model.addAttribute("textbooks", textbook.get());
 			model.addAttribute("courses", courseRepo.findByTextbooksContains(textbook.get()));
-			return "textbook";
+			return "textbook-template";
 		}
 		
 		throw new TextbookNotFoundException();
@@ -83,7 +83,7 @@ public class CourseController {
 	public String findAllTextooks(Model model) {
 		
 		model.addAttribute("textbooks", textbookRepo.findAll());
-		return "textbooks";
+		return "textbooks-template";
 		
 	}
 
