@@ -2,8 +2,6 @@
 package courses;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.Matchers.hasSize;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
@@ -45,7 +43,7 @@ class CourseControllerMockMvcTest {
 	private TopicRepository topicRepo;
 
 	@MockBean
-	private TextbookRepository TextbookRepo;
+	private TextbookRepository textbookRepo;
 
 	@Mock
 	private Course courseOne;
@@ -58,6 +56,12 @@ class CourseControllerMockMvcTest {
 
 	@Mock
 	private Topic topicTwo;
+
+	@Mock
+	private Textbook textbookOne;
+
+	@Mock
+	private Textbook textbookTwo;
 
 	/*
 	 * MIKE Note to Self: I am not sure I understand exceptions, and how, why, or
@@ -146,7 +150,47 @@ class CourseControllerMockMvcTest {
 
 	@Test
 	public void shouldAddAllTextbooksToModel() throws Exception {
-
+		Collection<Textbook> allTextbooks = Arrays.asList(textbookOne, textbookTwo);
+		when(textbookRepo.findAll()).thenReturn(allTextbooks);
+		this.mockMvc.perform(get("/textbooks")).andExpect(model().attribute("textbooks", allTextbooks));
 	}
 
+	/********* Single Textbook Tests Follow ***********/
+	@Test
+	public void shouldRouteToSingleTextbook() throws Exception {
+		long arbitraryId = 1;
+		when(textbookRepo.findById(arbitraryId)).thenReturn(Optional.of(textbookOne));
+		this.mockMvc.perform(get("/textbook?id=1")).andExpect(view().name(is("textbook-template")));
+	}
+
+	
+	/*Michael's Note to Self:
+	 * 
+	 * I do not feel like the following test are driving development.
+	 * They are not failing at the start, they are passing. 
+	 * 
+	 * The test before this drives creation of the template, 
+	 * but after that, the rest work.  I don't think I should have been creating
+	 * the @RequestParams, or the @GettingMapping when I built out the CourseController 
+	 * in the first place.  Then these tests would have driven that build out.
+	 * */
+	@Test
+	public void shouldGetStatusOfOkForSingleTextbook() throws Exception {
+		long arbitraryId = 1;
+		/*
+		 * Not fully sure why I need this following line of code for single ietmes, but
+		 * not the All items I think, with the "All items", the template resolves
+		 * without a RequestParamter. But with the single topics, I need to inject an
+		 * actual item...
+		 */
+		when(textbookRepo.findById(arbitraryId)).thenReturn(Optional.of(textbookOne));
+		this.mockMvc.perform(get("/textbook?id=1")).andExpect(status().isOk());
+	}
+
+	@Test
+	public void shouldAddSingleTextbookToModel() throws Exception {
+		long arbitraryId = 1;
+		when(textbookRepo.findById(arbitraryId)).thenReturn(Optional.of(textbookOne));
+		this.mockMvc.perform(get("/textbook?id=1")).andExpect(model().attribute("textbooks", textbookOne));
+	}
 }

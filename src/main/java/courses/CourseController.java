@@ -21,7 +21,13 @@ public class CourseController {
 	@Resource
 	TextbookRepository textbookRepo;
 
-	
+	/*
+	 * Michael Note to self.
+	 * 
+	 * I am not sure I fully understand the @RequestParam stuff.
+	 * Is it basically saying, parse the URL, and find the parameter?
+	 * 
+	 * */
 	@RequestMapping("/course")
 	public String findOneCourse(@RequestParam(value="id") long id, Model model) throws CourseNotFoundException {
 		
@@ -65,7 +71,7 @@ public class CourseController {
 	}
 
 	@RequestMapping("/textbook")
-	public String findOneTextbook(long Id, Model model) throws TextbookNotFoundException {
+	public String findOneTextbook(@RequestParam(value= "id") long Id, Model model) throws TextbookNotFoundException {
 
 		Optional<Textbook> textbook = textbookRepo.findById(Id);
 		
