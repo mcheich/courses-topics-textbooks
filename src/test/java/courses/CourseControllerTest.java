@@ -53,7 +53,6 @@ public class CourseControllerTest {
 	private TextbookRepository textbookRepo;
 	
 	
-
 	
 	@Before
 	public void setUp() {
@@ -101,9 +100,23 @@ public class CourseControllerTest {
 	}
 	
 	@Test
-	public void shouldAddOneTextbook() {
+	public void shouldAddOneTextbook() throws TextbookNotFoundException {
 		long arbitraryId = 1;
-		when(textbookRepo.findById())
+		when(textbookRepo.findById(arbitraryId)).thenReturn(Optional.of(textbookOne));
+		
+		underTest.findOneTextbook(arbitraryId, model);
+		
+		verify(model).addAttribute("textbooks", textbookOne);
+	}
+	
+	@Test
+	public void shouldAddAllTextbooks() {
+		Collection<Textbook> allTextbooks = Arrays.asList(textbookOne, textbookTwo);
+		when(textbookRepo.findAll()).thenReturn(allTextbooks);
+		
+		underTest.findAllTextooks(model);
+		
+		verify(model).addAttribute("textbooks", allTextbooks);
 	}
 
 }

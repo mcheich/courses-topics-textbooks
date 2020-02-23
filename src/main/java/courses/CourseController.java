@@ -18,6 +18,10 @@ public class CourseController {
 	@Resource
 	TopicRepository topicRepo;
 	
+	@Resource
+	TextbookRepository textbookRepo;
+
+	
 	@RequestMapping("/course")
 	public String findOneCourse(@RequestParam(value="id") long id, Model model) throws CourseNotFoundException {
 		
@@ -57,6 +61,29 @@ public class CourseController {
 		
 		model.addAttribute("topics",topicRepo.findAll());
 		return "topics";
+		
+	}
+
+	@RequestMapping("/textbook")
+	public String findOneTextbook(long Id, Model model) throws TextbookNotFoundException {
+
+		Optional<Textbook> textbook = textbookRepo.findById(Id);
+		
+		if(textbook.isPresent()) {
+			model.addAttribute("textbooks", textbook.get());
+			model.addAttribute("courses", courseRepo.findByTextbooksContains(textbook.get()));
+			return "textbook";
+		}
+		
+		throw new TextbookNotFoundException();
+		
+	}
+
+	@RequestMapping("/textbooks")
+	public String findAllTextooks(Model model) {
+		
+		model.addAttribute("textbooks", textbookRepo.findAll());
+		return "textbooks";
 		
 	}
 
