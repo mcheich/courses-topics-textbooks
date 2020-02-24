@@ -14,7 +14,9 @@
     </header>
 
     <ul>
-        <li></li>
+        <li th:each="topic: ${topics}">
+            <a th:href="@{/topic(id=${topic.id})}" th:text="${topic.name}"></a>
+        </li>
     </ul>
 
 

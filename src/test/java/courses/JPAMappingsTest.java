@@ -142,5 +142,17 @@ public class JPAMappingsTest {
 		
 		assertThat(course.getTextbooks(), containsInAnyOrder(book, book2));
 	}
+	
+	@Test
+	public void shouldGenerateTextbookId() {
+		Course course = courseRepo.save(new Course("name", "description"));
+		Textbook textbook = textbookRepo.save(new Textbook("textbook", course));
+		long textbookId = textbook.getId();
+		
+		entityManager.flush();
+		entityManager.clear();
+		
+		assertThat(textbookId, is(greaterThan(0L)));
+	}
 
 }

@@ -13,14 +13,16 @@
         <h1>A Topic Yo</h1>
     </header>
 
-    <ul>
-        <li></li>
-    </ul>
+    <div th:each="topic: ${topics}">
+        <h2 th:text="${topic.name}"></h2>
+    </div>
 
+    <div th:each="course: ${courses}">
+        <h2>
+            <a th:href="@{/course(id=${course.id})}" th:text="${course.name}"></a>
+        </h2>
+    </div>
 
-    <nav>
-
-    </nav>
 </body>
 
 </html>

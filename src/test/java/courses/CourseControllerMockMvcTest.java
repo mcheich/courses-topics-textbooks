@@ -29,7 +29,7 @@ class CourseControllerMockMvcTest {
 	private MockMvc mockMvc;
 
 	/*
-	 * Mike Note to Self
+	 * Mike's Note to Self
 	 * 
 	 * I do not understand the difference between Mock and MockBean I get the use -
 	 * i.e. Mocks for an Object, MockBeans for a repository of objects. But I am not
@@ -163,17 +163,17 @@ class CourseControllerMockMvcTest {
 		this.mockMvc.perform(get("/textbook?id=1")).andExpect(view().name(is("textbook-template")));
 	}
 
-	
-	/*Michael's Note to Self:
+	/*
+	 * Michael's Note to Self:
 	 * 
-	 * I do not feel like the following test are driving development.
-	 * They are not failing at the start, they are passing. 
+	 * I do not feel like the following test are driving development. They are not
+	 * failing at the start, they are passing.
 	 * 
-	 * The test before this drives creation of the template, 
-	 * but after that, the rest work.  I don't think I should have been creating
-	 * the @RequestParams, or the @GettingMapping when I built out the CourseController 
-	 * in the first place.  Then these tests would have driven that build out.
-	 * */
+	 * The test before this drives creation of the template, but after that, the
+	 * rest work. I don't think I should have been creating the @RequestParams, or
+	 * the @GettingMapping when I built out the CourseController in the first place.
+	 * Then these tests would have driven that build out.
+	 */
 	@Test
 	public void shouldGetStatusOfOkForSingleTextbook() throws Exception {
 		long arbitraryId = 1;

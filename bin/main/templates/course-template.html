@@ -13,11 +13,12 @@
         <h1>A Course Yo</h1>
     </header>
 
+    <h2 th:text="${courses.name}"></h2>
+    <h2 th:text="${courses.description}"></h2>
+    <div th:each="topic: ${courses.topics}">
+        <h2 th:text="${topic.name}"></h2>
+    </div>
 
-
-    <nav>
-
-    </nav>
 </body>
 
 </html>

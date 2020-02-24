@@ -19,6 +19,10 @@ public class Textbook {
 
 	@ManyToOne
 	private Course course;  
+
+	public long getId() {
+		return this.Id;
+	}
 	
 	public String getTitle() {
 		return title;
@@ -58,5 +62,6 @@ public class Textbook {
 			return false;
 		return true;
 	}
+
 
 }

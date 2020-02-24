@@ -10,14 +10,15 @@
 <body>
 
     <header>
-        <h1>All Courses</h1>
+        <h1>All Courses Yo</h1>
     </header>
 
+    <ul>
+        <li th:each="course: ${courses}">
+            <a th:href="@{/course(id=${course.id})}" th:text="${course.name}"></a>
+        </li>
+    </ul>
 
-
-    <nav>
-
-    </nav>
 </body>
 
 </html>
