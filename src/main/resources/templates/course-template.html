@@ -19,6 +19,12 @@
         <h2 th:text="${topic.name}"></h2>
     </div>
 
+    <form method="POST">
+        <div>
+            <input type="hidden" name="courseId" th:value="${courses.id}">
+            <button th:formaction="@{delete-course-by-id}">Delete this course</button>
+        </div>
+    </form>
 </body>
 
 </html>

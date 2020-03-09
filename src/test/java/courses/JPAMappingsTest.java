@@ -1,6 +1,7 @@
 package courses;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.junit.Assert.assertThat;
@@ -124,7 +125,6 @@ public class JPAMappingsTest {
 	@Test
 	public void shouldEstablishTextBookToCourseRelationship() {
 		
-		
 		Course course = courseRepo.save(new Course("name", "description"));
 		long courseId = course.getId();
 		
@@ -155,4 +155,19 @@ public class JPAMappingsTest {
 		assertThat(textbookId, is(greaterThan(0L)));
 	}
 
+	@Test
+	public void shouldSortCourses() {
+		Topic java = topicRepo.save(new Topic("java"));
+		
+		Course ooLanguage = courseRepo.save(new Course("OO Languages", "description", java));
+		Course advancedJava = courseRepo.save(new Course("Adv Java", "description", java));
+
+		entityManager.flush();
+		entityManager.clear();
+		
+		Collection<Course> sortedCourses = courseRepo.findAllByOrderByNameAsc();
+		
+		
+		assertThat(sortedCourses, contains(advancedJava, ooLanguage));		
+	}
 }

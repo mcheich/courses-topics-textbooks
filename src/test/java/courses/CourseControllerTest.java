@@ -1,5 +1,6 @@
 package courses;
 
+import static org.junit.Assert.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -28,11 +29,13 @@ import org.springframework.ui.Model;
 
 public class CourseControllerTest {
 	
+	
 	@InjectMocks
 	private CourseController underTest;
 	
 	@Mock
 	private Course courseOne;
+	Long courseId; 
 	
 	@Mock
 	private Course courseTwo;
@@ -127,6 +130,35 @@ public class CourseControllerTest {
 		
 		verify(model).addAttribute("textbooks", allTextbooks);
 	}
+	
+	@Test
+	public void shouldAddAdditionalCoursesToModel() {
+		String topicName = "topic name";
+		Topic newTopic = topicRepo.findByName(topicName);
+		String courseName = "new course";
+		String courseDescription = "new course decsription";
+		
+		underTest.addCourse(courseName, courseDescription, topicName);
+		Course newCourse = new Course(courseName, courseDescription, newTopic);
+		when(courseRepo.save(newCourse)).thenReturn(newCourse);
+		
+	}
+	
+	@Test
+	public void shouldDeleteCourseFromModelByName() {
+		String courseName = courseOne.getName();
+		when(courseRepo.findByName(courseName)).thenReturn(courseOne);
+		underTest.deleteCourseByName(courseName);
+		verify(courseRepo).delete(courseOne);
+	}
+	
+	@Test
+	public void shouldDeleteCourseFromModelById() {
+		underTest.deleteCourseById(courseId);
+		verify(courseRepo).deleteById(courseId);
+	}
+	
+	
 	
 
 }
