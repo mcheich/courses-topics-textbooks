@@ -1,5 +1,8 @@
 package courses;
 
+import static java.lang.String.format;
+
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
@@ -10,9 +13,12 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class Course {
 
+	
 	@Id
 	@GeneratedValue
 	private long id;
@@ -20,9 +26,11 @@ public class Course {
 	private String name;
 	private String description;
 
+	@JsonIgnore
 	@ManyToMany
 	private Collection<Topic> topics;
 
+	@JsonIgnore
 	@OneToMany(mappedBy = "course")
 	private Collection<Textbook> textbooks;
 	
@@ -36,6 +44,30 @@ public class Course {
 		
 		return textbooks;
 	}
+
+	public Collection<Topic> getTopics() {
+		return topics;
+	}
+	
+	public String getName() {
+		return this.name;
+	}
+	
+	public String getDescription() {
+		return description;
+	}
+	
+	public Collection<String> getTopicUrls() {
+		
+		Collection<String> urls = new ArrayList<>();
+		
+		for (Topic topic : topics) {
+			//urls.add("topic?id=" + topic.getId());
+			urls.add(format("/courses/%d/topics/%s", this.getId(), topic.getName().toLowerCase()));
+		}
+
+		return urls;
+	}
 	
 	public Course() {
 		
@@ -46,17 +78,6 @@ public class Course {
 		this.topics = new HashSet<>(Arrays.asList(topics));
 	}
 
-	public Collection<Topic> getTopics() {
-		return topics;
-	}
-	
-	public String getName() {
-		return this.name;
-	}
-
-	public String getDescription() {
-		return description;
-	}
 
 	@Override
 	public int hashCode() {

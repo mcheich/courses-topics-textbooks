@@ -30,6 +30,8 @@ public class Topic {
 	public Collection<Course> getCourses() {
 		return courses;
 	}
+	
+	
 
 	public Topic() {
 
@@ -60,8 +62,5 @@ public class Topic {
 			return false;
 		return true;
 	}
-
-	
-	
 
 }

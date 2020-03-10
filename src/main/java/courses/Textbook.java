@@ -3,6 +3,8 @@ package courses;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.Collection;
 
 import javax.persistence.Entity;
@@ -17,6 +19,7 @@ public class Textbook {
 	
 	private String title;
 
+	@JsonIgnore
 	@ManyToOne
 	private Course course;  
 
