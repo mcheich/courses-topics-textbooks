@@ -1,4 +1,4 @@
-package courses;
+package courses.controllers;
 
 import static org.hamcrest.CoreMatchers.not;
 
@@ -9,8 +9,20 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import courses.CourseNotFoundException;
+import courses.TextbookNotFoundException;
+import courses.TopicNotFoundException;
+import courses.models.Course;
+import courses.models.Textbook;
+import courses.models.Topic;
+import courses.repositories.CourseRepository;
+import courses.repositories.TextbookRepository;
+import courses.repositories.TopicRepository;
 
 @Controller
 public class CourseController {
@@ -37,7 +49,7 @@ public class CourseController {
 		Optional<Course> course = courseRepo.findById(id);
 
 		if (course.isPresent()) {
-			model.addAttribute("courses", course.get());
+			model.addAttribute("course", course.get());
 			return "course-template";
 		}
 
@@ -58,7 +70,7 @@ public class CourseController {
 		Optional<Topic> topic = topicRepo.findById(id);
 
 		if (topic.isPresent()) {
-			model.addAttribute("topics", topic.get());
+			model.addAttribute("topic", topic.get());
 			model.addAttribute("courses", courseRepo.findByTopicsContains(topic.get()));
 			return "topic-template";
 		}
@@ -118,15 +130,28 @@ public class CourseController {
 	@RequestMapping("/delete-course")
 	public String deleteCourseByName(String courseName) {
 
-		if (courseRepo.findByName(courseName) != null) {
-			Course deletedCourse = courseRepo.findByName(courseName);
-			courseRepo.delete(deletedCourse);
+		Course foundCourse = courseRepo.findByName(courseName);
+		
+		
+		if (foundCourse != null) {
+			
+			for(Textbook text : foundCourse.getTextbooks()) {
+				textbookRepo.delete(text);
+			}
+			courseRepo.delete(foundCourse);
 		}
 		return "redirect:/show-courses";
 	}
 
 	@RequestMapping("/delete-course-by-id")
 	public String deleteCourseById(Long courseId) {
+		
+		Optional<Course> foundCourse = courseRepo.findById(courseId);
+		Course courseToRemoveCourse = foundCourse.get();
+		
+		for(Textbook text : courseToRemoveCourse.getTextbooks()) {
+			textbookRepo.delete(text);
+		}
 		
 		courseRepo.deleteById(courseId);
 		return "redirect:/show-courses";
@@ -146,4 +171,17 @@ public class CourseController {
 		model.addAttribute("courses", courseRepo.findAllByOrderByNameAsc());
 		return "courses-template";
 	}
+	
+	@RequestMapping(path="/topics/{topicName}", method=RequestMethod.POST)
+	public String addTopic(@PathVariable String topicName, Model model) {
+		Topic topicToAdd = topicRepo.findByName(topicName);
+		
+		if(topicToAdd == null) {
+			topicToAdd = new Topic(topicName);
+			topicRepo.save(topicToAdd);
+		}
+		model.addAttribute("topics", topicRepo.findAll());		
+		return "partials/topics-list-added";
+	}
+	
 }

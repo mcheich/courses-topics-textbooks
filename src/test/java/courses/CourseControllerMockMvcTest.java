@@ -21,6 +21,14 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
+import courses.controllers.CourseController;
+import courses.models.Course;
+import courses.models.Textbook;
+import courses.models.Topic;
+import courses.repositories.CourseRepository;
+import courses.repositories.TextbookRepository;
+import courses.repositories.TopicRepository;
+
 @RunWith(SpringRunner.class)
 @WebMvcTest(CourseController.class)
 class CourseControllerMockMvcTest {
@@ -94,7 +102,7 @@ class CourseControllerMockMvcTest {
 	@Test
 	public void shouldAddSingleCourseToTheModel() throws Exception {
 		when(courseRepo.findById(1L)).thenReturn(Optional.of(courseOne));
-		this.mockMvc.perform(get("/course?id=1")).andExpect(model().attribute("courses", is(courseOne)));
+		this.mockMvc.perform(get("/course?id=1")).andExpect(model().attribute("course", is(courseOne)));
 	}
 
 	/********* All Topics Tests Follow ***********/
@@ -134,7 +142,7 @@ class CourseControllerMockMvcTest {
 	@Test
 	public void shouldAddOneTopicToModel() throws Exception {
 		when(topicRepo.findById(1L)).thenReturn(Optional.of(topicOne));
-		this.mockMvc.perform(get("/topic?id=1")).andExpect(model().attribute("topics", topicOne));
+		this.mockMvc.perform(get("/topic?id=1")).andExpect(model().attribute("topic", topicOne));
 	}
 
 	/********* All Textbooks Tests Follow ***********/

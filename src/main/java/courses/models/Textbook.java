@@ -1,4 +1,4 @@
-package courses;
+package courses.models;
 
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;

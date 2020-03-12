@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>A Course</title>
+    <title th:text="${course.name}"></title>
 </head>
 
 <body>
@@ -13,15 +13,15 @@
         <h1>A Course Yo</h1>
     </header>
 
-    <h2 th:text="${courses.name}"></h2>
-    <h2 th:text="${courses.description}"></h2>
-    <div th:each="topic: ${courses.topics}">
+    <h2 th:text="${course.name}"></h2>
+    <h2 th:text="${course.description}"></h2>
+    <div th:each="topic: ${course.topics}">
         <h2 th:text="${topic.name}"></h2>
     </div>
 
     <form method="POST">
         <div>
-            <input type="hidden" name="courseId" th:value="${courses.id}">
+            <input type="hidden" name="courseId" th:value="${course.id}">
             <button th:formaction="@{delete-course-by-id}">Delete this course</button>
         </div>
     </form>

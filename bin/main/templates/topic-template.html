@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>A Topic</title>
+    <title th:text="${topic.name}"></title>
 </head>
 
 <body>
@@ -13,15 +13,17 @@
         <h1>A Topic Yo</h1>
     </header>
 
-    <div th:each="topic: ${topics}">
-        <h2 th:text="${topic.name}"></h2>
-    </div>
 
-    <div th:each="course: ${courses}">
-        <h2>
+
+
+    <h2 th:text="${topic.name}"></h2>
+
+
+    <ul th:each="course: ${courses}">
+        <li>
             <a th:href="@{/course(id=${course.id})}" th:text="${course.name}"></a>
-        </h2>
-    </div>
+        </li>
+    </ul>
 
 </body>
 

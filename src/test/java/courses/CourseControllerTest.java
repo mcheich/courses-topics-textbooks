@@ -16,6 +16,7 @@ import org.junit.Before;
 //import org.junit.jupiter.api.Test;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -25,6 +26,17 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.ui.Model;
+
+import courses.CourseNotFoundException;
+import courses.TextbookNotFoundException;
+import courses.TopicNotFoundException;
+import courses.controllers.CourseController;
+import courses.models.Course;
+import courses.models.Textbook;
+import courses.models.Topic;
+import courses.repositories.CourseRepository;
+import courses.repositories.TextbookRepository;
+import courses.repositories.TopicRepository;
 
 
 public class CourseControllerTest {
@@ -78,7 +90,7 @@ public class CourseControllerTest {
 		
 		underTest.findOneCourse(arbitraryCourseId, model);
 		
-		verify(model).addAttribute("courses", courseOne);
+		verify(model).addAttribute("course", courseOne);
 	}
 	
 	@Test
@@ -98,7 +110,7 @@ public class CourseControllerTest {
 		
 		underTest.findOneTopic(arbitraryCourseId, model);
 		
-		verify(model).addAttribute("topics", topicOne);
+		verify(model).addAttribute("topic", topicOne);
 	}
 
 	@Test
@@ -133,15 +145,18 @@ public class CourseControllerTest {
 	
 	@Test
 	public void shouldAddAdditionalCoursesToModel() {
+		//Arrange
 		String topicName = "topic name";
-		Topic newTopic = topicRepo.findByName(topicName);
 		String courseName = "new course";
 		String courseDescription = "new course decsription";
 		
+		//Act
 		underTest.addCourse(courseName, courseDescription, topicName);
-		Course newCourse = new Course(courseName, courseDescription, newTopic);
-		when(courseRepo.save(newCourse)).thenReturn(newCourse);
+		ArgumentCaptor<Course> courseArgument = ArgumentCaptor.forClass(Course.class);
 		
+		//Assert
+		verify(courseRepo).save(courseArgument.capture());
+		assertEquals("new course", courseArgument.getValue().getName());
 	}
 	
 	@Test

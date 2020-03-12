@@ -1,4 +1,4 @@
-package courses;
+package courses.models;
 
 import static java.lang.String.format;
 
